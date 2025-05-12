@@ -1,0 +1,2 @@
+In the future, if you install another version of CUDA and want to manage it with the alternatives system, you can add it with a command pattern similar to:
+sudo update-alternatives --install /usr/local/cuda cuda /usr/local/cuda-NEW_VERSION NEW_PRIORITY
