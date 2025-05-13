@@ -10,10 +10,9 @@ set encoding=utf-8
 set hidden
 
 " Aesthetic Settings
-if has('termguicolors')
-  set termguicolors
-endif
-colorscheme desert
+" if has('termguicolors')
+"  set termguicolors
+" endif
 set number relativenumber
 set cursorline
 set showmatch
@@ -93,7 +92,16 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'morhetz/gruvbox'
+Plug 'dracula/vim'   " <--- Add this line for Dracula
 call plug#end()
+
+" Gruvbox Configuration (Must be AFTER plug#end())
+" let g:gruvbox_termcolors=256
+" colorscheme gruvbox
+
+" Dracula Configuration (Must be AFTER plug#end())
+colorscheme dracula
 
 " Plugin Configurations
 let g:airline_powerline_fonts = 1

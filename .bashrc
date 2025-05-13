@@ -95,3 +95,7 @@ fi
 
 [ -f ~/.bash_local ] && . ~/.bash_local
 
+# Set TERM for tmux
+if [ -n "$TMUX" ]; then
+  export TERM=tmux-256color
+fi
