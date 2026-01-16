@@ -26,3 +26,23 @@ alias ....='cd ../../..'
 alias h='history'
 alias c='clear'
 alias v='vim'
+
+# Python/ML shortcuts
+alias py='python3'
+alias jl='jupyter lab'
+alias jn='jupyter notebook'
+
+# GPU monitoring
+alias gpus='nvidia-smi'
+alias gpuwatch='watch -n 1 nvidia-smi'
+
+# Quick navigation
+alias res='cd ~/research'
+alias data='cd ~/datasets'
+
+# Disk space helpers
+alias duu='du -h --max-depth=1 | sort -hr'
+alias dff='df -h | grep -v tmpfs'
+
+# Process search
+alias psg='ps aux | grep -v grep | grep -i'

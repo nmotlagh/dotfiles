@@ -1,0 +1,33 @@
+[user]
+    email = nicholas.motlagh.ext@afresearchlab.com
+    name = Nicholas Kashani Motlagh
+
+[core]
+    editor = vim
+    pager = less -FRX
+
+[alias]
+    st = status
+    co = checkout
+    br = branch
+    ci = commit
+    unstage = reset HEAD --
+    last = log -1 HEAD
+    visual = log --graph --oneline --all
+    uncommit = reset --soft HEAD~1
+
+[color]
+    ui = auto
+
+[push]
+    default = current
+    autoSetupRemote = true
+
+[pull]
+    rebase = false
+
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true

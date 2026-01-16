@@ -12,8 +12,8 @@ esac
 
 HISTCONTROL=ignoreboth
 shopt -s histappend
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=10000
+HISTFILESIZE=20000
 
 #########################
 # Window Resize Support #
@@ -99,3 +99,19 @@ fi
 if [ -n "$TMUX" ]; then
   export TERM=tmux-256color
 fi
+
+#############################
+# Python/ML Optimizations   #
+#############################
+
+export PYTHONDONTWRITEBYTECODE=1
+export PYTHONUNBUFFERED=1
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+. "$HOME/.local/bin/env"
+. "$HOME/.cargo/env"
+alias nvitop="uvx nvitop"
