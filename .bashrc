@@ -36,30 +36,53 @@ if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-# Color prompt if terminal supports it
-case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes ;;
-esac
+# Minimal git segment for the prompt.
+__prompt_git() {
+    command -v git >/dev/null 2>&1 || return 0
+    git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return 0
+    local branch
+    branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null) || return 0
+    local dirty=""
+    git diff --quiet --ignore-submodules --cached && git diff --quiet --ignore-submodules || dirty="*"
+    printf " (%s%s)" "$branch" "$dirty"
+}
 
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 &>/dev/null; then
-        color_prompt=yes
+__prompt_host="${HOSTNAME%%.*}"
+
+__prompt_title() {
+    case "$TERM" in
+        xterm*|rxvt*)
+            local title_path="${PWD/#$HOME/~}"
+            printf '\033]0;%s\007' "${debian_chroot:+($debian_chroot)}${USER}@${__prompt_host}: ${title_path}"
+            ;;
+    esac
+}
+
+__prompt_set() {
+    local exit_code=$?
+    local reset="\[\033[0m\]"
+    local dim="\[\033[38;5;245m\]"
+    local blue="\[\033[38;5;39m\]"
+    local green="\[\033[38;5;70m\]"
+    local yellow="\[\033[38;5;214m\]"
+    local red="\[\033[38;5;203m\]"
+    local status_color="$green"
+    if [ "$exit_code" -ne 0 ]; then
+        status_color="$red"
+    fi
+    local chroot="${debian_chroot:+($debian_chroot) }"
+    local git="$(__prompt_git)"
+
+    PS1="${dim}${chroot}[${blue}\u@\h${dim}] [${green}\w${dim}]${yellow}${git}${dim} [${status_color}${exit_code}${dim}]\n${blue}> ${reset}"
+}
+
+if [[ "$PROMPT_COMMAND" != *"__prompt_set"* ]]; then
+    if [[ -n "$PROMPT_COMMAND" ]]; then
+        PROMPT_COMMAND="__prompt_title; __prompt_set; $PROMPT_COMMAND"
+    else
+        PROMPT_COMMAND="__prompt_title; __prompt_set"
     fi
 fi
-
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt
-
-# Set terminal title if applicable
-case "$TERM" in
-    xterm*|rxvt*)
-        PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-        ;;
-esac
 
 #############################
 # Color and Useful Aliases  #
@@ -99,3 +122,7 @@ fi
 if [ -n "$TMUX" ]; then
   export TERM=tmux-256color
 fi
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
