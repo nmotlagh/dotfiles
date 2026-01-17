@@ -64,6 +64,7 @@ __prompt_set() {
     local dim="\[\033[38;5;245m\]"
     local blue="\[\033[38;5;39m\]"
     local green="\[\033[38;5;70m\]"
+    local cyan="\[\033[38;5;45m\]"
     local yellow="\[\033[38;5;214m\]"
     local red="\[\033[38;5;203m\]"
     local status_color="$green"
@@ -71,9 +72,13 @@ __prompt_set() {
         status_color="$red"
     fi
     local chroot="${debian_chroot:+($debian_chroot) }"
+    local venv=""
+    if [ -n "${VIRTUAL_ENV:-}" ]; then
+        venv=" (${VIRTUAL_ENV##*/})"
+    fi
     local git="$(__prompt_git)"
 
-    PS1="${dim}${chroot}[${blue}\u@\h${dim}] [${green}\w${dim}]${yellow}${git}${dim} [${status_color}${exit_code}${dim}]\n${blue}> ${reset}"
+    PS1="${dim}${chroot}[${blue}\u@\h${dim}] [${green}\w${dim}]${cyan}${venv}${yellow}${git}${dim} [${status_color}${exit_code}${dim}]\n${blue}> ${reset}"
 }
 
 if [[ "$PROMPT_COMMAND" != *"__prompt_set"* ]]; then
@@ -135,6 +140,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-. "$HOME/.local/bin/env"
-. "$HOME/.cargo/env"
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 alias nvitop="uvx nvitop"
