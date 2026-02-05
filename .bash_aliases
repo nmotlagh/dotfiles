@@ -46,3 +46,11 @@ alias dff='df -h | grep -v tmpfs'
 
 # Process search
 alias psg='ps aux | grep -v grep | grep -i'
+
+# Tmux
+alias ta='tmux attach -t'
+alias tl='tmux list-sessions'
+alias tn='tmux new -s'
+
+# Tools
+alias nvitop='uvx nvitop'

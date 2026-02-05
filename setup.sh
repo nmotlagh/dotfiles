@@ -2,18 +2,75 @@
 set -e
 
 DOTFILES_DIR="$HOME/dotfiles"
-echo "Setting up dotfiles from $DOTFILES_DIR..."
+BACKUP_DIR="$HOME/.dotfiles_backup/$(date +%Y%m%d_%H%M%S)"
+
+blue="\033[38;5;39m"
+green="\033[38;5;70m"
+dim="\033[38;5;245m"
+reset="\033[0m"
+
+info()  { printf "${blue}::${reset} %s\n" "$1"; }
+ok()    { printf "${green} ✓${reset} %s\n" "$1"; }
+
+FILES=(
+    .bashrc
+    .bash_aliases
+    .bash_functions
+    .bash_profile
+    .vimrc
+    .tmux.conf
+    .gitconfig
+    .helpful_commands
+)
+
+DIRS=(.vim)
+
+# Backup existing files (only real files, not existing symlinks to us)
+info "Checking for existing files to back up..."
+needs_backup=false
+for f in "${FILES[@]}" "${DIRS[@]}"; do
+    target="$HOME/$f"
+    if [ -e "$target" ] && [ ! -L "$target" ]; then
+        needs_backup=true
+        break
+    fi
+done
+
+if $needs_backup; then
+    mkdir -p "$BACKUP_DIR"
+    for f in "${FILES[@]}" "${DIRS[@]}"; do
+        target="$HOME/$f"
+        if [ -e "$target" ] && [ ! -L "$target" ]; then
+            mv "$target" "$BACKUP_DIR/"
+            ok "Backed up $f → $BACKUP_DIR/"
+        fi
+    done
+fi
 
 # Create symlinks
-ln -sf "$DOTFILES_DIR/.bashrc" ~/.bashrc
-ln -sf "$DOTFILES_DIR/.bash_aliases" ~/.bash_aliases
-ln -sf "$DOTFILES_DIR/.bash_functions" ~/.bash_functions
-ln -sf "$DOTFILES_DIR/.bash_profile" ~/.bash_profile
-ln -sf "$DOTFILES_DIR/.vimrc" ~/.vimrc
-ln -sf "$DOTFILES_DIR/.tmux.conf" ~/.tmux.conf
-ln -sf "$DOTFILES_DIR/.gitconfig" ~/.gitconfig
-ln -sf "$DOTFILES_DIR/.helpful_commands" ~/.helpful_commands
-ln -snf "$DOTFILES_DIR/.vim" ~/.vim
+info "Linking dotfiles..."
+for f in "${FILES[@]}"; do
+    ln -sf "$DOTFILES_DIR/$f" "$HOME/$f"
+    ok "Linked $f"
+done
+for d in "${DIRS[@]}"; do
+    ln -snf "$DOTFILES_DIR/$d" "$HOME/$d"
+    ok "Linked $d/"
+done
 
-echo "Dotfiles linked successfully!"
-echo "Run: source ~/.bashrc"
+# Install vim-plug if missing
+if [ ! -f "$HOME/.vim/autoload/plug.vim" ]; then
+    info "Installing vim-plug..."
+    curl -fLo "$HOME/.vim/autoload/plug.vim" --create-dirs \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim 2>/dev/null
+    ok "vim-plug installed (run :PlugInstall in vim)"
+else
+    ok "vim-plug already present"
+fi
+
+# Reload tmux if running
+if command -v tmux &>/dev/null && tmux list-sessions &>/dev/null; then
+    tmux source-file "$HOME/.tmux.conf" 2>/dev/null && ok "Tmux config reloaded"
+fi
+
+printf "\n${green}Done!${reset} Run: ${blue}source ~/.bashrc${reset}\n"

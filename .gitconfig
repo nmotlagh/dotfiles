@@ -16,8 +16,14 @@
     visual = log --graph --oneline --all
     uncommit = reset --soft HEAD~1
 
+[init]
+    defaultBranch = main
+
 [color]
     ui = auto
+
+[diff]
+    algorithm = histogram
 
 [push]
     default = current
