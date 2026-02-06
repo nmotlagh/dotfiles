@@ -61,12 +61,12 @@ __prompt_title() {
 __prompt_set() {
     local exit_code=$?
     local reset="\[\033[0m\]"
-    local dim="\[\033[38;5;245m\]"
-    local blue="\[\033[38;5;39m\]"
-    local green="\[\033[38;5;70m\]"
-    local cyan="\[\033[38;5;45m\]"
-    local yellow="\[\033[38;5;214m\]"
-    local red="\[\033[38;5;203m\]"
+    local dim="\[\033[38;2;127;132;156m\]"
+    local blue="\[\033[38;2;137;180;250m\]"
+    local green="\[\033[38;2;166;227;161m\]"
+    local cyan="\[\033[38;2;148;226;213m\]"
+    local yellow="\[\033[38;2;249;226;175m\]"
+    local red="\[\033[38;2;243;139;168m\]"
     local status_color="$green"
     if [ "$exit_code" -ne 0 ]; then
         status_color="$red"
