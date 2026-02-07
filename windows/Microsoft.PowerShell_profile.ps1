@@ -86,6 +86,9 @@ function la { Get-ChildItem -Force -Name @args }
 function jl { jupyter lab @args }
 function jn { jupyter notebook @args }
 
+# Tools
+function yolo { claude --dangerously-skip-permissions @args }
+
 #############################
 # Functions                 #
 #############################
