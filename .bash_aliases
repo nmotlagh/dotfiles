@@ -53,5 +53,4 @@ alias tl='tmux list-sessions'
 alias tn='tmux new -s'
 
 # Tools
-alias nvitop='uvx nvitop'
 alias yolo='claude --dangerously-skip-permissions'
