@@ -58,6 +58,30 @@ for d in "${DIRS[@]}"; do
     ok "Linked $d/"
 done
 
+# Claude Code config
+CLAUDE_FILES=(
+    .claude/CLAUDE.md
+    .claude/settings.json
+    .claude/skills/codex/SKILL.md
+)
+
+info "Linking Claude Code config..."
+for f in "${CLAUDE_FILES[@]}"; do
+    target="$HOME/$f"
+    source="$DOTFILES_DIR/$f"
+    if [ -f "$source" ]; then
+        # Backup existing file if it's not already a symlink
+        if [ -e "$target" ] && [ ! -L "$target" ]; then
+            mkdir -p "$BACKUP_DIR/$(dirname "$f")"
+            mv "$target" "$BACKUP_DIR/$f"
+            ok "Backed up $f → $BACKUP_DIR/"
+        fi
+        mkdir -p "$(dirname "$target")"
+        ln -sf "$source" "$target"
+        ok "Linked $f"
+    fi
+done
+
 # Install vim-plug if missing
 if [ ! -f "$HOME/.vim/autoload/plug.vim" ]; then
     info "Installing vim-plug..."
