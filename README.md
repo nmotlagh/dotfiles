@@ -15,7 +15,7 @@ The setup script backs up any existing configs to `~/.dotfiles_backup/` before s
 
 ## What's Included
 
-| File | Purpose |
+| File / Dir | Purpose |
 |---|---|
 | `.bashrc` | Interactive shell: prompt with git branch, history, color support |
 | `.bash_aliases` | Shortcuts for git, navigation, GPU monitoring, tmux |
@@ -24,6 +24,9 @@ The setup script backs up any existing configs to `~/.dotfiles_backup/` before s
 | `.vimrc` | Vim config with Dracula theme, vim-plug, airline, fzf |
 | `.tmux.conf` | Tmux with Catppuccin Mocha colors, vi copy mode |
 | `.gitconfig` | Git aliases, histogram diffs, LFS support |
+| `.claude/CLAUDE.md` | Claude Code global instructions |
+| `.codex/AGENTS.md` | Codex CLI global instructions |
+| `skills/` | Shared [Agent Skills](https://agentskills.io) for Claude Code and Codex CLI |
 | `setup.sh` | Symlink installer with backup and vim-plug bootstrap |
 
 ## Highlights
@@ -49,6 +52,23 @@ The setup script backs up any existing configs to `~/.dotfiles_backup/` before s
 ### Git
 - Aliases: `st`, `co`, `br`, `ci`, `visual` (graph log), `uncommit`
 - Histogram diff algorithm, auto-setup remote on push
+
+## Agent Skills
+
+Skills are stored in `skills/` and symlinked into both `~/.claude/skills/` and `~/.codex/skills/` by `setup.sh`. They follow the open [Agent Skills](https://agentskills.io) standard and work across both tools.
+
+| Skill | Invocation | What It Does |
+|---|---|---|
+| `compile-latex` | Auto or `/compile-latex` | Compile paper, categorize errors/warnings |
+| `check-refs` | Auto or `/check-refs` | Validate `\ref{}`, `\cite{}`, `\label{}` |
+| `check-tables` | Auto or `/check-tables` | Number consistency: tables vs prose |
+| `acl-format-check` | Auto or `/acl-format-check` | ACL submission compliance checklist |
+| `proofread-section` | `/proofread-section <file>` | Grammar, style, clarity review |
+| `review-paper` | `/review-paper` | Full ACL reviewer simulation (forked context) |
+| `fill-results` | `/fill-results <path>` | Update tables from experiment output |
+| `codex` | `/codex` | Delegate tasks to OpenAI Codex CLI |
+
+To add a new skill, create `skills/<name>/SKILL.md` — it will be available to both agents after running `setup.sh` (or immediately for Claude Code since `~/.claude/skills` is a direct symlink to `skills/`).
 
 ## Customization
 
