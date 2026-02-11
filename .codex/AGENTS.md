@@ -7,7 +7,7 @@
 | **nick-a100-80** | 1x A100 80GB SXM4 | Primary dev VM (a2-ultragpu-1g, us-central1-a) |
 
 - **Data disk**: 300GB mounted at /data (nick-a100-80)
-- **Python**: 3.12, venvs in ~/venvs/
+- **Python**: 3.10 installed; prefer 3.12 for new work, venvs in ~/venvs/
 
 ## Airgapped Cluster (SCREAM Lab)
 
