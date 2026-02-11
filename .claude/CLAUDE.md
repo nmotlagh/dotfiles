@@ -7,7 +7,7 @@
 | **nick-a100-80** | 1x A100 80GB SXM4 | Primary dev VM (a2-ultragpu-1g, us-central1-a) |
 
 - **Data disk**: 300GB mounted at /data (nick-a100-80)
-- **Python**: 3.10, venvs in ~/venvs/
+- **Python**: 3.12, venvs in ~/venvs/
 
 ## Airgapped Cluster (SCREAM Lab)
 
@@ -29,7 +29,7 @@
 - **HuggingFace mirror (models)**: `/models/hf/` — local mirror of HF model repos, structured like HF (e.g., `/models/hf/Qwen/Qwen2.5-7B-Instruct`)
 - **HuggingFace mirror (datasets)**: `/data/hf/` — local mirror of HF dataset repos (e.g., `/data/hf/openai/gsm8k`)
 - **Usage**: Treat paths like HF repo IDs. E.g., `load_dataset("/data/hf/openai/gsm8k", ...)` or `AutoModelForCausalLM.from_pretrained("/models/hf/Qwen/Qwen2.5-7B-Instruct")` — works as a drop-in replacement for online HF access.
-- **Python**: Create venvs on node, `pip install` uses internal mirror
+- **Python**: 3.12. Create venvs on node, `pip install` uses internal mirror
 - **Job runner**: tmux/screen (no SLURM), sessions persist indefinitely
 - **No walltime limit**: Jobs run unattended for days
 
