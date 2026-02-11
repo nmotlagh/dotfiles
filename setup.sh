@@ -61,7 +61,6 @@ done
 # Claude Code config
 CLAUDE_FILES=(
     .claude/CLAUDE.md
-    .claude/settings.json
     .claude/skills/codex/SKILL.md
 )
 
